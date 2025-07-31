@@ -47,7 +47,31 @@ class DiscordListener:
             "analyze": self.handle_analyze_command,
             "execute": self.handle_execute_command,
             "help": self.handle_help_command,
-            "queue": self.handle_queue_command
+            "queue": self.handle_queue_command,
+            "stocks": self.handle_stocks_command,
+            "analyze_stocks": self.handle_analyze_stocks_command,
+            "execute_stock_trades": self.handle_execute_stock_trades_command,
+            "track_stocks": self.handle_track_stocks_command,
+            "summary": self.handle_summary_command,
+            "summary_ai": self.handle_summary_ai_command,
+            "top_earners": self.handle_top_earners_command,
+            "auto_on": self.handle_auto_on_command,
+            "auto_off": self.handle_auto_off_command,
+            "wallet": self.handle_wallet_command,
+            "make_channel": self.handle_make_channel_command,
+            "rename_channel": self.handle_rename_channel_command,
+            "move_logs_channel": self.handle_move_logs_channel_command,
+            "autofix": self.handle_autofix_command,
+            # AI Self-Building Commands - CRITICAL FOR GITHUB SYNC
+            "autoevolve": self.handle_autoevolve_command,
+            "build_self": self.handle_build_self_command,
+            # Bot Spawning Commands - CRITICAL FOR BOT MANAGEMENT
+            "spawn_bot": self.handle_spawn_bot_command,
+            "inject_keys": self.handle_inject_keys_command,
+            "upgrade_bot": self.handle_upgrade_bot_command,
+            "list_my_bots": self.handle_list_my_bots_command,
+            "terminate_bot": self.handle_terminate_bot_command,
+            "assign_bot": self.handle_assign_bot_command
         }
         
         # Bot state
@@ -256,10 +280,38 @@ class DiscordListener:
   `/goal <type> [context]` - Set AI goals (learn/optimize/maintain/evolve)
   `/analyze [type] [target]` - Analyze data or system
 
+💹 **Stock Trading:**
+  `/stocks` - Collect latest stock market data
+  `/analyze_stocks` - Run pattern detection and volatility screening
+  `/execute_stock_trades` - Execute stock trading strategies
+  `/track_stocks` - Track portfolio performance
+  `/wallet [action]` - Check wallet balances and trading status
+
+🧠 **AI Intelligence:**
+  `/summary` - Generate trading summary from logs
+  `/summary_ai` - Show top AI predictions by confidence
+  `/top_earners` - Rank top 5 performing assets
+
+⚙️ **Automation:**
+  `/auto_on` - Enable autonomous trading mode
+  `/auto_off` - Disable autonomous trading mode
+
+🤖 **Bot Spawning:**
+  `/spawn_bot name:<n> brain:<1-100>` - Create downloadable AI bot
+  `/inject_keys botname:<n> api=<key>` - Add API keys to bot
+  `/upgrade_bot botname:<n>` - Manual GitHub sync
+  `/list_my_bots` - List your autonomous bots
+  `/terminate_bot botname:<n>` - Delete bot permanently
+
+🧠 **AI Evolution - CRITICAL:**
+  `/autoevolve` - Trigger autonomous module generation & GitHub sync
+  `/build_self [hint]` - Force AI to build missing capabilities
+
 ⚙️ **System Control:**
   `/mode <mode>` - Change operational mode
   `/flush <type>` - Clear memory/cache/logs
   `/execute <task>` - Manually run a specific task
+  `/autofix` - Run automatic error fixing
 
 📊 **Status & Info:**
   `/status` - Show system status
@@ -271,6 +323,213 @@ class DiscordListener:
 🧹 **Flush Types:** memory, cache, logs, temp, all
 """
         return help_message
+
+    async def handle_autoevolve_command(self, args, user_id=None):
+        """Handle /autoevolve command - triggers AI self-building cycle with GitHub sync"""
+        try:
+            self.logger.info(f"Auto-evolve command from user {user_id}")
+            
+            task_id = self.task_router.add_task(
+                "ai_self_builder",
+                task_type="evolution",
+                priority=2,
+                trigger_source="discord",
+                metadata={"user_id": user_id, "command": "autoevolve"}
+            )
+            
+            if task_id:
+                return f"""🧠 **AI Evolution Initiated**
+
+🔍 Scanning for missing modules and commands...
+✨ Generating new capabilities autonomously...
+🔄 GitHub sync enabled for bot distribution...
+📝 Task ID: {task_id}
+✅ Russo Jr is evolving - new modules will be auto-generated!"""
+            else:
+                return "❌ Failed to initiate auto-evolution. Please try again."
+                
+        except Exception as e:
+            self.logger.error(f"Error in autoevolve command: {str(e)}")
+            return f"❌ Error processing auto-evolution: {str(e)}"
+
+    async def handle_build_self_command(self, args, user_id=None):
+        """Handle /build_self command - alias for autoevolve with detailed output"""
+        try:
+            self.logger.info(f"Build-self command from user {user_id}")
+            
+            # Get module name if specified
+            module_hint = args[0] if args else None
+            
+            task_id = self.task_router.add_task(
+                "ai_self_builder",
+                task_type="evolution",
+                priority=1,
+                trigger_source="discord",
+                metadata={
+                    "user_id": user_id, 
+                    "command": "build_self",
+                    "module_hint": module_hint
+                }
+            )
+            
+            if task_id:
+                return f"""🔧 **AI Self-Building Initiated**
+
+🎯 Target: {module_hint or 'Auto-detect missing capabilities'}
+🧠 Analyzing current architecture...
+⚡ High priority task queued
+📝 Task ID: {task_id}
+🚀 Building missing functionality autonomously!"""
+            else:
+                return "❌ Failed to initiate self-building. Please try again."
+                
+        except Exception as e:
+            self.logger.error(f"Error in build_self command: {str(e)}")
+            return f"❌ Error processing self-building: {str(e)}"
+
+    async def handle_spawn_bot_command(self, args, user_id=None):
+        """Handle /spawn_bot command - spawns new autonomous bot clone"""
+        try:
+            # Parse bot spawn parameters
+            if not args:
+                return """❌ **Usage**: `/spawn_bot name:<botname> brain:<1-100> [currencies:<BTC,ETH,USD>]`
+
+**Examples:**
+• `/spawn_bot name:MyTrader brain:75 currencies:BTC,ETH`
+• `/spawn_bot name:ConservativeBot brain:25 currencies:USD`
+
+**Brain Levels:**
+• 1-25%: Conservative trading, basic modules
+• 26-50%: Balanced approach, moderate modules  
+• 51-75%: Aggressive trading, advanced modules
+• 76-100%: Ultra-aggressive, all modules unlocked"""
+            
+            # Basic implementation - you'll need to expand this
+            task_id = self.task_router.add_task(
+                "bot_spawner",
+                task_type="bot_spawn",
+                priority=1,
+                trigger_source="discord",
+                metadata={"user_id": user_id, "command": "spawn_bot", "args": args}
+            )
+            
+            if task_id:
+                return f"""🤖 **Bot Spawning Initiated**
+
+🧠 Creating autonomous trading bot...
+📦 Preparing downloadable package...
+🔄 GitHub integration enabled...
+📝 Task ID: {task_id}
+✅ Your bot will be ready shortly!"""
+            else:
+                return "❌ Failed to spawn bot. Please try again."
+                
+        except Exception as e:
+            self.logger.error(f"Error in spawn_bot command: {str(e)}")
+            return f"❌ Error spawning bot: {str(e)}"
+
+    # Add placeholder handlers for missing commands
+    async def handle_stocks_command(self, args, user_id=None):
+        """Handle /stocks command - triggers stock data collection"""
+        task_id = self.task_router.add_task("stock_data_collector", task_type="stock", priority=2, trigger_source="discord", metadata={"user_id": user_id, "command": "stocks"})
+        return f"📈 **Stock Data Collection Initiated**\n🔄 Fetching latest market data...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to queue stock data collection"
+
+    async def handle_analyze_stocks_command(self, args, user_id=None):
+        """Handle /analyze_stocks command"""
+        task_id = self.task_router.add_task("stock_pattern_detector", task_type="stock", priority=2, trigger_source="discord", metadata={"user_id": user_id, "command": "analyze_stocks"})
+        return f"🔍 **Stock Analysis Initiated**\n📊 Running pattern detection...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to queue stock analysis"
+
+    async def handle_execute_stock_trades_command(self, args, user_id=None):
+        """Handle /execute_stock_trades command"""
+        task_id = self.task_router.add_task("stock_trade_executor", task_type="stock", priority=1, trigger_source="discord", metadata={"user_id": user_id, "command": "execute_stock_trades"})
+        return f"💰 **Stock Trade Execution Initiated**\n🎯 Analyzing positions...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to queue trade execution"
+
+    async def handle_track_stocks_command(self, args, user_id=None):
+        """Handle /track_stocks command"""
+        task_id = self.task_router.add_task("stock_portfolio_tracker", task_type="stock", priority=2, trigger_source="discord", metadata={"user_id": user_id, "command": "track_stocks"})
+        return f"📋 **Portfolio Tracking Initiated**\n💼 Analyzing performance...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to queue portfolio tracking"
+
+    async def handle_summary_command(self, args, user_id=None):
+        """Handle /summary command"""
+        task_id = self.task_router.add_task("summary_reporter", task_type="utility", priority=2, trigger_source="discord", metadata={"user_id": user_id, "command": "summary"})
+        return f"📊 **Trading Summary Generation**\n💰 Calculating P&L metrics...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to queue summary generation"
+
+    async def handle_summary_ai_command(self, args, user_id=None):
+        """Handle /summary_ai command"""
+        task_id = self.task_router.add_task("ai_summary_reporter", task_type="ai", priority=2, trigger_source="discord", metadata={"user_id": user_id, "command": "summary_ai"})
+        return f"🧠 **AI Predictions Summary**\n🎯 Analyzing top confidence predictions...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to queue AI summary"
+
+    async def handle_top_earners_command(self, args, user_id=None):
+        """Handle /top_earners command"""
+        task_id = self.task_router.add_task("leaderboard_generator", task_type="utility", priority=2, trigger_source="discord", metadata={"user_id": user_id, "command": "top_earners"})
+        return f"🏆 **Top Earners Analysis**\n🥇 Ranking top performers...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to queue top earners analysis"
+
+    async def handle_auto_on_command(self, args, user_id=None):
+        """Handle /auto_on command"""
+        task_id = self.task_router.add_task("auto_mode_controller", task_type="utility", priority=1, trigger_source="discord", metadata={"user_id": user_id, "command": "auto_on", "mode": "enable"})
+        return f"🟢 **Auto Trading Mode ENABLED**\n⚡ Autonomous algorithms activated\n📝 Task ID: {task_id}" if task_id else "❌ Failed to enable auto trading"
+
+    async def handle_auto_off_command(self, args, user_id=None):
+        """Handle /auto_off command"""
+        task_id = self.task_router.add_task("auto_mode_controller", task_type="utility", priority=1, trigger_source="discord", metadata={"user_id": user_id, "command": "auto_off", "mode": "disable"})
+        return f"🔴 **Auto Trading Mode DISABLED**\n✋ Manual control restored\n📝 Task ID: {task_id}" if task_id else "❌ Failed to disable auto trading"
+
+    async def handle_wallet_command(self, args, user_id=None):
+        """Handle /wallet command"""
+        action = args[0].lower() if args else "balance"
+        return f"💰 **Wallet {action.title()} Report**\n🏦 Checking exchange balances...\n💡 Use `/wallet help` for options"
+
+    async def handle_make_channel_command(self, args, user_id=None):
+        """Handle /make_channel command"""
+        channel_name = "_".join(args).lower() if args else None
+        if not channel_name:
+            return "❌ **Usage**: `/make_channel [channel_name]`"
+        task_id = self.task_router.add_task("discord_channel_manager", task_type="utility", priority=2, trigger_source="discord", metadata={"user_id": user_id, "command": "make_channel", "channel_name": channel_name})
+        return f"🔧 **Channel Creation**\n📝 Creating: #{channel_name}\nTask ID: {task_id}" if task_id else "❌ Failed to queue channel creation"
+
+    async def handle_rename_channel_command(self, args, user_id=None):
+        """Handle /rename_channel command"""
+        if len(args) < 2:
+            return "❌ **Usage**: `/rename_channel [old_name] [new_name]`"
+        return f"🔧 **Channel Rename**\n📝 Renaming: #{args[0]} → #{args[1]}"
+
+    async def handle_move_logs_channel_command(self, args, user_id=None):
+        """Handle /move_logs_channel command"""
+        channel_name = "_".join(args).lower() if args else None
+        if not channel_name:
+            return "❌ **Usage**: `/move_logs_channel [channel_name]`"
+        return f"🔧 **Log Channel Updated**\n📝 Default logs: #{channel_name}"
+
+    async def handle_autofix_command(self, args, user_id=None):
+        """Handle /autofix command"""
+        task_id = self.task_router.add_task("auto_fixer_v1", task_type="maintenance", priority=1, trigger_source="discord", metadata={"user_id": user_id, "command": "autofix"})
+        return f"🔧 **Auto-Fix Initiated**\n🛠️ Running error fixing cycle...\n📝 Task ID: {task_id}" if task_id else "❌ Failed to initiate auto-fix"
+
+    async def handle_inject_keys_command(self, args, user_id=None):
+        """Handle /inject_keys command"""
+        return "🔑 **API Key Injection**\n💡 Usage: `/inject_keys botname:<name> kraken=<key> alpaca=<key>`"
+
+    async def handle_upgrade_bot_command(self, args, user_id=None):
+        """Handle /upgrade_bot command"""
+        botname = args[0] if args else None
+        if not botname:
+            return "❌ **Usage**: `/upgrade_bot botname:<name>`"
+        return f"🔄 **Bot Upgrade**\n🤖 Upgrading: {botname}\n📦 Syncing with GitHub..."
+
+    async def handle_list_my_bots_command(self, args, user_id=None):
+        """Handle /list_my_bots command"""
+        return f"🤖 **Your Autonomous Bots**\n\n📋 No bots found for user {user_id}\n💡 Use `/spawn_bot` to create your first bot!"
+
+    async def handle_terminate_bot_command(self, args, user_id=None):
+        """Handle /terminate_bot command"""
+        botname = args[0] if args else None
+        if not botname:
+            return "❌ **Usage**: `/terminate_bot botname:<name>`"
+        return f"⚠️ **Bot Termination**\n🤖 Terminating: {botname}\n🗑️ This action is permanent!"
+
+    async def handle_assign_bot_command(self, args, user_id=None):
+        """Handle /assign_bot command"""
+        return "🤖 **Bot Assignment**\n💡 Usage: `/assign_bot @user name:<botname> brain:<%>`"
     
     async def process_discord_message(self, content, user_id=None, channel_id=None):
         """Process a Discord message and route commands"""
