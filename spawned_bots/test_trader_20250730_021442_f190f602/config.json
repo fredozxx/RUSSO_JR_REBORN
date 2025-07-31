@@ -1,0 +1,50 @@
+{
+  "bot_info": {
+    "name": "Test Trader",
+    "version": "1.0",
+    "created": "2025-07-30T02:14:42.385724",
+    "personality": {
+      "brain_percent": 75,
+      "risk_tolerance": 0.5249999999999999,
+      "aggression_level": 0.6000000000000001,
+      "learning_rate": 0.675,
+      "trading_style": "aggressive",
+      "personality_traits": [
+        "analytical",
+        "cautious",
+        "patient"
+      ],
+      "created_at": "2025-07-30T02:14:42.366612"
+    }
+  },
+  "trading": {
+    "max_trade_amount": 1000.0,
+    "risk_threshold": 0.5249999999999999,
+    "trading_pairs": [
+      "BTC/USD",
+      "ETH/USD",
+      "AAPL",
+      "TSLA"
+    ],
+    "update_interval": 60,
+    "max_daily_trades": 50
+  },
+  "api_keys": {
+    "kraken": "test_kraken_key",
+    "alpaca": "test_alpaca_key",
+    "finnhub": "PLACEHOLDER_FINNHUB_KEY",
+    "polygon": "PLACEHOLDER_POLYGON_KEY",
+    "coingecko": "PLACEHOLDER_COINGECKO_KEY"
+  },
+  "security": {
+    "encrypt_keys": true,
+    "backup_frequency": "daily",
+    "log_level": "INFO"
+  },
+  "auto_upgrade": {
+    "enabled": true,
+    "check_interval": 86400,
+    "backup_before_upgrade": true,
+    "github_repo": "RUSSO_JR_REBORN"
+  }
+}
